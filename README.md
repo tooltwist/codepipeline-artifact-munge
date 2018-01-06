@@ -8,9 +8,9 @@ This project provides a general purpose Lambda that can be inserted into a CodeP
 
 Inputs are:
 
-**Artifact 1** - a zip file in the S3 bucket
-**Artifact 2** - also a zip file in the S3 bucket
-**insertPath**  - a path where Artifact 2 files will be inserted
+**Artifact 1** - a zip file in the S3 bucket  
+**Artifact 2** - also a zip file in the S3 bucket  
+**insertPath**  - a path where Artifact 2 files will be inserted  
 
 The output artifact of the step will be Artifact 1, with the entire contents of Artifact 2 inserted at the specified location.
 
