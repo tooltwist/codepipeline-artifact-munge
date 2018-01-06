@@ -1,10 +1,10 @@
 # lambda-codepipeline-merge
 
-CodePipeline allows a series of steps, where the outputs of one step (artifacts) can be used as inputs for other steps. These artifacts are stored in an S3 bucket as Zip files.
+CodePipeline allows a series of steps, where the outputs of step (artifacts) can be used as inputs for subsequent steps. These artifacts are stored in an S3 bucket as Zip files.
 
-In some cases we want to merge multiple artifacts to create a single, new artifact. For example, the CodePipeline _Build_ action only allows one artifact to be passed as input. 
+Unfortunately, some steps only ollow a singele artifact to be used as input. For example, the CodePipeline _Build_ action only allows one artifact to be passed as input. This causes a problem if you want to build an application that combines source files from more than one location.
 
-This project provides a general purpose Lambda that can be inserted into a CodePipeline to allow two artifacts from previous steps to be combined and passed to the next step.
+This project provides a general purpose Lambda that can be inserted into a CodePipeline to allow two artifacts from previous steps to be combined and passed to a following step.
 
 Inputs are:
 
