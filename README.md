@@ -16,8 +16,8 @@ The output artifact of the step will be Artifact 1, with the entire contents of 
 
 
 
-### Our Use-case at ToolTwist
-Example, at ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
+### The Use Case at ToolTwist
+At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
 
 In earlier times we used the same Docker image for an applicaton in these various environments, and then injected the necessary environment-specific config files by copying them into the Docker hosts and mounting them as Docker Volumes into the application containers. This was a multi-step process, prone to error, and introducing a larger security-sensitive surface area than we would like.
 
