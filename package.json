@@ -1,0 +1,17 @@
+{
+  "name": "lambda-codepipeline-merge",
+  "version": "1.0.0",
+  "description": "Merge AWS CodePipeline artifacts",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philip Callener <philip.callender@tooltwist.com>",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "jszip": "^3.1.5",
+    "jszip-utils": "0.0.2"
+  }
+}
