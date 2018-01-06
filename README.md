@@ -8,15 +8,15 @@ This project provides a general purpose Lambda that can be inserted into a CodeP
 
 Inputs are:
 
-Artifact 1 (a zip file in the S3 bucket)
-Artifact 2 (also a zip file in the S3 bucket)
-insertPath - a path where Artifact 2 files will be inserted
+**Artifact 1** - a zip file in the S3 bucket
+**Artifact 2** - also a zip file in the S3 bucket
+**insertPath**  - a path where Artifact 2 files will be inserted
 
 The output artifact of the step will be Artifact 1, with the entire contents of Artifact 2 inserted at the specified location.
 
 
 
-### Our Use-case
+### Our Use-case at ToolTwist
 Example, at ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
 
 In earlier times we used the same Docker image for an applicaton in these various environments, and then injected the necessary environment-specific config files by copying them into the Docker hosts and mounting them as Docker Volumes into the application containers. This was a multi-step process, prone to error, and introducing a larger security-sensitive surface area than we would like.
