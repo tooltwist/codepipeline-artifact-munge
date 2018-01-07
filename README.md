@@ -1,12 +1,15 @@
 # lambda-codepipeline-merge
 
-CodePipeline allows a series of steps, where the outputs of step (artifacts) can be used as inputs for subsequent steps. These artifacts are stored in an S3 bucket as Zip files.
+CodePipeline allows a series of "stages", each consisting of one or more "actions", where the outputs of one action can be used as inputs for subsequent action. These outputs are called "artifacts" and  are stored in an S3 bucket as Zip files.
 
-Unfortunately, some steps only ollow a singele artifact to be used as input. For example, the CodePipeline _Build_ action only allows one artifact to be passed as input. This causes a problem if you want to build an application that combines source files from more than one location.
+Unfortunately, some actions only ollow a single artifact to be used as input. For example, the CodePipeline _Build_ action only allows one artifact to be used as input. This causes a problem if you want to build an application that combines source files from more than one location.
 
-This project provides a general purpose Lambda that can be inserted into a CodePipeline to allow two artifacts from previous steps to be combined and passed to a following step.
+This project provides a general purpose Lambda that can be inserted into a CodePipeline to allow two artifacts from previous steps to be combined to create a new artifact, to be used by a subsequent step such as _Build_.
 
-Inputs are:
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/848697/34648939-6d0971f6-f3df-11e7-8920-c634dfea0737.png"/></div>
+
+
+Inputs to the Lambda are:
 
 **Artifact 1** - a zip file in the S3 bucket  
 **Artifact 2** - also a zip file in the S3 bucket  
@@ -15,6 +18,17 @@ Inputs are:
 The output artifact of the step will be Artifact 1, with the entire contents of Artifact 2 inserted at the specified location.
 
 
+### Using this Lambda
+
+This Lambda is available in our public S3 bucket, but we recommend you build it from scratch yourself. To do this
+
+1. Clone this repository onto your machine
+1. Run `npm build` to create Lambda.zip
+1. Upload this Zip file either into a the AWS Lambda console or into your own S3 bucket.
+1. Include the Lambda in your CodePipeline.
+
+
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/848697/34648933-532c01c2-f3df-11e7-8909-d0be3e0f50fe.png"/></div>
 
 ### The Use Case at ToolTwist
 At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
