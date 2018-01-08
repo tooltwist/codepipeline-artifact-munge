@@ -8,11 +8,6 @@ In other cases, only some of the files in an artifact should be passed to an act
 
 This project provides a general purpose [Lambda](https://aws.amazon.com/lambda/) that can be inserted into a [AWS CodePipeline](https://aws.amazon.com/codepipeline/) to allow artifacts to be **merged** or to allow files from an artifact to be **extracted**, in each case creating a new artifact.
 
-In the example below, we have the source code in a Github repository managed by the development team, while security sensitive infrastructure configuration files and a deployment script are stored in an AWS CodeCommit repository and managed by the infras team.
-
-These two repositories are _merged_ before the build stage, so the configuration can be baked into the Docker image.
-
-Similarly, the Deployment script is _extracted_ from the infrastucture artifact and passed on to the deployment stage.
 
 
 ## A Typical Use Case
