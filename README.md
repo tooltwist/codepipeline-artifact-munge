@@ -25,16 +25,21 @@ In earlier times we used the same Docker image for an applicaton in these variou
 
 Using CodePipeline, we now generate a separate Docker image for each environment, which has the environment-specific config files baked in.
 
-- Application code comes from a Github repo.
-- Environment config comes from CodeCommit repo.
-- This merge step combines these before the build step that creates the Docker image, and the Dockerfile placed the config files into the required locations.
+- Application code comes from Github.
+- Infrastructure config and scripts come from a secure AWS CodeCommit repo.
+- A merge stage combines source code and config files for the _Build_ stage. This allows it to create Docker images with the configuration baked in.
+- The infrastructure setup scripts are separated into a new artifact for the _Deployment_ stage.
 
-As well as simpler process, there are considerable security benefits.
-1. Sensitive config details are safely stored in CodeCommit with restricted access, rather than floating around on developer and Ops user's machines.
-1. The entire build process is locked down, from the time source and configs leave their git repos till the time the applications are deployed.
-1. In production, sensitive config information is hidden many levels deep, back behind the subnets, security groups, and ECS hosts.
-1. No sensitive information is located on in S3 buckets, or other locations that may be accidentally made public.
+<p style="clear: both;"> 
 
+This provides a simpler processand also security benefits:
+
+1. No sensitive information is located in Github, in S3 buckets, or other locations that may be accidentally made public.
+1. Docker images are similarly hidden away within the AWS environment.
+1. 'Baking-in' the config information removes the complexities of mounting volumes in an ECS environment.
+1. In production, Docker images hidden many levels deep, behind the subnets, security groups, and ECS hosts.
+
+In summary, the deployment process is locked down from start to finish, with minimal passing around of credentials, and other sensitive information.
 
 
 
