@@ -19,31 +19,31 @@ Similarly, the Deployment script is _extracted_ from the infrastucture artifact 
 
 <img align="right" src="https://user-images.githubusercontent.com/848697/34682108-e02e30dc-f4d8-11e7-85ec-37a96290e161.png">
 
-At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
+At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments running on Amazon ECS.
 
-In earlier times we used the same Docker image for an applicaton in these various environments, and then injected the necessary environment-specific config files by copying them into the Docker hosts and mounting them as Docker Volumes into the application containers. This was a multi-step process, prone to error, and introducing a larger security-sensitive surface area than we would like.
+In earlier times we used the same Docker image in CI, test, staging, etc, and injected the environment-specific config files by copying them into the Docker hosts and mounting them into the application containers as Docker volumes. This was a multi-step process, prone to error, and introducing a larger security-sensitive surface area than we would like.
 
-Using CodePipeline, we now generate a separate Docker image for each environment, which has the environment-specific config files baked in.
+Using CodePipeline we now generate a new Docker image for each environment, with the environment-specific config files baked in.
 
 - Application code comes from Github.
-- Infrastructure config and scripts come from a secure AWS CodeCommit repo.
-- A merge stage combines source code and config files for the _Build_ stage. This allows it to create Docker images with the configuration baked in.
-- The infrastructure setup scripts are separated into a new artifact for the _Deployment_ stage.
+- Infrastructure config and scripts come from a carefully protected AWS CodeCommit repo.
+- A _Merge_ stage in our CodePipeline combines source code and config files before the _Build_ stage, so it can create Docker images with their configurations baked in.
+- An _Extract_ stage extracts the deployment scripts from the CodeCommit artifact and passes it along to the _Deployment_ stage.
 
 <p style="clear: both;"> 
 
-This provides a simpler processand also security benefits:
+This provides a simpler process and security benefits:
 
-1. No sensitive information is located in Github, in S3 buckets, or other locations that may be accidentally made public.
-1. Docker images are similarly hidden away within the AWS environment.
-1. 'Baking-in' the config information removes the complexities of mounting volumes in an ECS environment.
-1. In production, Docker images hidden many levels deep, behind the subnets, security groups, and ECS hosts.
+1. No sensitive information is located in Github, S3 buckets, or other locations that may be accidentally made public.
+1. Docker images remain safely hidden away within the AWS environment.
+1. 'Baking-in' the configs removes the complexities of mounting volumes in an ECS environment.
+1. In production, the Docker containers many levels deep, behind the subnets, security groups, and ECS hosts.
 
 In summary, the deployment process is locked down from start to finish, with minimal passing around of credentials, and other sensitive information.
 
 
 
-# Preparing the Lambda
+## Preparing the Lambda Source
 
 This Lambda is available in our public S3 bucket, but we recommend you build it from scratch yourself.
 
@@ -54,11 +54,8 @@ This Lambda is available in our public S3 bucket, but we recommend you build it 
 
 Feel free to give your S3 bucket public access if it's more convenient - this project is open source.
 
-#### Using the Lambda
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/848697/34648933-532c01c2-f3df-11e7-8909-d0be3e0f50fe.png"/></div>
-
-#### Cloudformation definition
+## Using the Lambda via Cloudformation
 If you are using Cloudformation to create you CodePipeline, the following may provide a guide.
 
 First you need to define a role for the lambdas to use. This may include a few more permissions than required - feel free to let me know.
@@ -152,18 +149,19 @@ has been uploaded to an S3 bucket named `nbt-lambda`. You should replace that wi
 
 
 
-#### Inputs to MergeLambda
+Inputs to MergeLambda:
 
 **Artifact 1** - a zip file in the S3 bucket  
 **Artifact 2** - also a zip file in the S3 bucket  
-**UserParameters**  - a path where Artifact 2 files will be inserted  
+**UserParameters**  - a path where Artifact 2 files will be inserted   
 
 The output artifact will be Artifact 1, with the entire contents of Artifact 2 inserted at the specified location.
 
 
-#### Inputs to ExtractLambda
-**An Artifact** - a zip file in the S3 bucket  
-**UserParameters** - a comma separated list of file names to extract from the artifact. 
+Inputs to ExtractLambda:
+
+**An Artifact** - a zip file in the S3 bucket   
+**UserParameters** - a comma separated list of file names to extract from the artifact.   
 
 The output will be an artifact containing only the specified files.
 
@@ -222,7 +220,7 @@ Finally, to use these functions in your CodePipeline.
 
 
 
-## Defining the Lambda by hand
+## Deploying the Lambda by hand
 
 The Lambda functions can be defined by hand by loading the Jar file directoly into the [Lambda Management Console](https://ap-southeast-1.console.aws.amazon.com/lambda/home). Make sure you define the Runtime and Handler as shown below. For the _Merge_ function use `merge.handler`.
 
