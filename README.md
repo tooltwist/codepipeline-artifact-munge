@@ -230,4 +230,6 @@ Once the lamba is published it can be included into a CodePipeline by pressing _
 ![uselambda](https://user-images.githubusercontent.com/848697/34684012-b7ec2b46-f4de-11e7-91ba-80cd443a9a20.png)
 
 
--oOo-
+## Contributing
+If the existing code does not match your exact needs it should be simple enough to tweak it to do what you want. If you then feel the change might be useful for someone else, feel free to send a pull request.
+
