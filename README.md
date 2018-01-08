@@ -14,12 +14,10 @@ These two repositories are _merged_ before the build stage, so the configuration
 
 Similarly, the Deployment script is _extracted_ from the infrastucture artifact and passed on to the deployment stage.
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/848697/34648939-6d0971f6-f3df-11e7-8920-c634dfea0737.png"/></div>
-
 
 ## Typical Use Case
 
-<img align="left" src="https://user-images.githubusercontent.com/848697/34682108-e02e30dc-f4d8-11e7-85ec-37a96290e161.png">
+<img align="right" src="https://user-images.githubusercontent.com/848697/34682108-e02e30dc-f4d8-11e7-85ec-37a96290e161.png">
 
 At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments, which we run on Amazon ECS.
 
@@ -40,11 +38,10 @@ As well as simpler process, there are considerable security benefits.
 
 
 
-## Using this Lambda
+# Preparing the Lambda
 
 This Lambda is available in our public S3 bucket, but we recommend you build it from scratch yourself.
 
-#### Preparing the Lambda
 1. Clone this repository onto your machine
 1. Run `npm build` to create `CodepipelineArtifactMunge.zip`
 1. Upload this Zip file into an S3 bucket that can be accessed from your CodePipelines.
