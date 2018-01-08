@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node testMerge.js && node testExtract.js",
-    "build": "rm -f Lambda.zip && npm install && zip -r Lambda.zip merge.js mergeIntoZip.js extract.js extractFromZip.js node_modules package.json"
+    "build": "rm -f Lambda.zip && npm install && zip -r Lambda.zip merge.js mergeIntoZip.js extract.js extractFromZip.js version.js node_modules package.json"
   },
   "author": "Philip Callener <philip.callender@tooltwist.com>",
   "license": "MIT",

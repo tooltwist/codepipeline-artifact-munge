@@ -13,46 +13,19 @@ console.log('Loading function');
 
 const AWS = require('aws-sdk');
 const mergeIntoZip = require('./mergeIntoZip')
+const VERSION = require('./version.js')
 
 // const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 exports.handler = (event, context, callback) => {
+  console.log('merge.handler()');
+  console.log('Version is ' + VERSION);
   console.log('Received event:', JSON.stringify(event, null, 2));
 
   // Get the CodePipeline details
   const job = event['CodePipeline.job']
   if (!job) {
     const message = `Error: lambda is missing event['CodePipeline.job']`;
-    console.log(message);
-    return callback(message);
-  }
-  const inputArtifacts = job.data.inputArtifacts;
-  if (!inputArtifacts || inputArtifacts.length != 2) {
-    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts to have two entries.`;
-    console.log(message);
-    return callback(message);
-  }
-  const artifact1 = inputArtifacts[0];
-  if (!artifact1.location || artifact1.location.type != 'S3') {
-    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts[0].location.type to be "S3".`;
-    console.log(message);
-    return callback(message);
-  }
-  const artifact2 = inputArtifacts[1];
-  if (!artifact2.location || artifact2.location.type != 'S3') {
-    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts[1].location.type to be "S3".`;
-    console.log(message);
-    return callback(message);
-  }
-  const outputArtifacts = job.data.outputArtifacts;
-  if (!outputArtifacts || outputArtifacts.length != 1) {
-    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts to have one entry.`;
-    console.log(message);
-    return callback(message);
-  }
-  const outputArtifact = outputArtifacts[0];
-  if (!outputArtifact.location || outputArtifact.location.type != 'S3') {
-    const message = `Error: lambda expects event['CodePipeline.job'].data.outputArtifacts[0].location.type to be "S3".`;
     console.log(message);
     return callback(message);
   }
@@ -117,7 +90,42 @@ exports.handler = (event, context, callback) => {
     });
   };
 
-  // TOTRY 1
+  /*
+   *  Check parameters to this Lambda.
+   */
+  const insertPath = job.data.actionConfiguration.configuration.UserParameters;
+  if (!insertPath) {
+    insertPath = ''
+  }
+  console.log('UserParameters used as insertPath: ' + insertPath);
+  const inputArtifacts = job.data.inputArtifacts;
+  if (!inputArtifacts || inputArtifacts.length != 2) {
+    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts to have two entries.`;
+    return notifyFailure(null, message);
+  }
+  const artifact1 = inputArtifacts[0];
+  if (!artifact1.location || artifact1.location.type != 'S3') {
+    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts[0].location.type to be "S3".`;
+    return notifyFailure(null, message);
+  }
+  const artifact2 = inputArtifacts[1];
+  if (!artifact2.location || artifact2.location.type != 'S3') {
+    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts[1].location.type to be "S3".`;
+    return notifyFailure(null, message);
+  }
+  const outputArtifacts = job.data.outputArtifacts;
+  if (!outputArtifacts || outputArtifacts.length != 1) {
+    const message = `Error: lambda expects event['CodePipeline.job'].data.inputArtifacts to have one entry.`;
+    return notifyFailure(null, message);
+  }
+  const outputArtifact = outputArtifacts[0];
+  if (!outputArtifact.location || outputArtifact.location.type != 'S3') {
+    const message = `Error: lambda expects event['CodePipeline.job'].data.outputArtifacts[0].location.type to be "S3".`;
+    return notifyFailure(null, message);
+  }
+
+
+
   // https://reformatcode.com/code/nodejs/extract-a-kms-encrypted-zip-file-from-aws-s3
   const credentials = job.data.artifactCredentials;
   const s3 = new AWS.S3({
@@ -166,7 +174,7 @@ exports.handler = (event, context, callback) => {
       /*
        *  Merge the second zip file into the first.
        */
-      mergeIntoZip(content1, content2, 'secure-config', function(err, outputContent) {
+      mergeIntoZip(content1, content2, insertPath, function(err, outputContent) {
         if (err) {
           const message = `Error while merging Zip files.`
           return notifyFailure(message, err);
