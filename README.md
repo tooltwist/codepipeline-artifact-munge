@@ -15,7 +15,7 @@ These two repositories are _merged_ before the build stage, so the configuration
 Similarly, the Deployment script is _extracted_ from the infrastucture artifact and passed on to the deployment stage.
 
 
-## Typical Use Case
+## A Typical Use Case
 
 <img align="right" src="https://user-images.githubusercontent.com/848697/34682108-e02e30dc-f4d8-11e7-85ec-37a96290e161.png">
 
@@ -222,6 +222,19 @@ Finally, to use these functions in your CodePipeline.
 
 
 
-## The Use Case at ToolTwist
+## Defining the Lambda by hand
+
+The Lambda functions can be defined by hand by loading the Jar file directoly into the [Lambda Management Console](https://ap-southeast-1.console.aws.amazon.com/lambda/home). Make sure you define the Runtime and Handler as shown below. For the _Merge_ function use `merge.handler`.
+
+Once you've uploaded the Zip file, don't forget the publish the lambda function (under the _Actions_ menu).
+
+![definelambda](https://user-images.githubusercontent.com/848697/34684006-b350c2d6-f4de-11e7-99aa-ea02d3449c93.png)
+
+
+Once the lamba is published it can be included into a CodePipeline by pressing _Edit_ and adding an action.
+
+
+![uselambda](https://user-images.githubusercontent.com/848697/34684012-b7ec2b46-f4de-11e7-91ba-80cd443a9a20.png)
+
 
 -oOo-
