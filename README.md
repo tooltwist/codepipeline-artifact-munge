@@ -1,6 +1,6 @@
 # codepipeline-artifact-munge
 
-CodePipeline uses a series of "stages", each consisting of one or more "actions", where the outputs of one action can be used as inputs for subsequent action. These outputs are called "artifacts" and  are stored in an S3 bucket as Zip files.
+CodePipeline uses a series of "stages", each consisting of one or more "actions", where the outputs of one action can be used as inputs for subsequent actions. These outputs are called "artifacts" and are stored in an S3 bucket as Zip files.
 
 Unfortunately, some actions only ollow a single artifact to be used as input. For example, the CodePipeline _Build_ action only allows one artifact to be used as input. This causes a problem if you want to build an application that combines source files from more than one location.
 
@@ -12,7 +12,7 @@ This project provides a general purpose [Lambda](https://aws.amazon.com/lambda/)
 
 ## A Typical Use Case
 
-<img align="right" src="https://user-images.githubusercontent.com/848697/34682108-e02e30dc-f4d8-11e7-85ec-37a96290e161.png">
+<img align="right" src="https://user-images.githubusercontent.com/848697/34743712-ba3a8b62-f5c5-11e7-857c-75a110516263.png">
 
 At ToolTwist we use CodePipeline to deploy into CI, test, staging and production environments running on Amazon ECS.
 
