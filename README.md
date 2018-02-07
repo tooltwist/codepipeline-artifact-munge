@@ -23,7 +23,7 @@ The output artifact of the step will be Artifact 1, with the entire contents of 
 This Lambda is available in our public S3 bucket, but we recommend you build it from scratch yourself. To do this
 
 1. Clone this repository onto your machine
-1. Run `npm build` to create Lambda.zip
+1. Run `npm run build` to create Lambda.zip
 1. Upload this Zip file either into a the AWS Lambda console or into your own S3 bucket.
 1. Include the Lambda in your CodePipeline.
 

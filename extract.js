@@ -163,15 +163,15 @@ exports.handler = (event, context, callback) => {
     //   var content2 = data2.Body;
 
     /*
-       *  Merge the second zip file into the first.
+       *  Extract the second zip file from the first.
        */
     //const filenames = 'Deploy.zip'
     extractFromZip(content1, filenames, function(err, outputContent) {
       if (err) {
-        const message = `Error while merging Zip files.`
+        const message = `Error while extracting Zip files.`
         return notifyFailure(message, err);
       }
-      console.log('Merge complete.');
+      console.log('Extract complete.');
 
       // Save the output artifact
       const outputName = outputArtifact.name;
@@ -200,13 +200,13 @@ exports.handler = (event, context, callback) => {
 
         // All complete
         console.log('Output artifact written successfully');
-        return notifySuccess('Merge complete');
+        return notifySuccess('Extract complete');
 
       }) //- putObject
       // }, function(err) {
       //   const message = `Error while saving output artifact to S3 bucket.`
       //   return notifyFailure(message, err);
       // }) - newZipfile
-    }) //- mergeIntoZip
+    }) //- extractFromZip
   }) // first artifact
 }

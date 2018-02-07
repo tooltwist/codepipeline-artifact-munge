@@ -40,8 +40,9 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
       (function nextFile(index) {
         if (index >= list.length) {
           // All done. Convert the modified Zip file back into a buffer
-          console.log('Finished');
+          console.log('mergeIntoZip 4');
           zip1.generateAsync({type: 'nodeBuffer'}).then(function(outputContent) {
+            console.log('mergeIntoZip 5');
             // Successfully converted to zip file format.
             // console.log(typeof(outputContent));
             // console.log('Length is: ' + outputContent.length);
