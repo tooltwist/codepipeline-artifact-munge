@@ -1,6 +1,6 @@
 {
   "name": "lambda-codepipeline-merge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Merge AWS CodePipeline artifacts",
   "main": "index.js",
   "scripts": {

@@ -59,7 +59,7 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
         var name = list[index]
         console.log(`    - ${name}`);
         var file = zip2.file(name);
-        file.async("string").then(content => {
+        file.async("binarystring").then(content => {
           // console.log('  content:', content);
 
           // Add the file into the first zip
@@ -67,7 +67,8 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
             date: file.date,
             unixPermissions: file.unixPermissions,
             dosPermissions: file.dosPermissions,
-            comment: file.comment
+            comment: file.comment,
+            binary: true
           })
 
           // On to the next file

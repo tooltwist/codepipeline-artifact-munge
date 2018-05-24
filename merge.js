@@ -12,8 +12,9 @@
 console.log('Loading function');
 
 const AWS = require('aws-sdk');
-const mergeIntoZip = require('./mergeIntoZip')
-const VERSION = require('./version.js')
+const mergeIntoZip = require('./mergeIntoZip');
+const VERSION = require('./version.js');
+var detectedServerSideEncryption = "";
 
 // const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
@@ -93,7 +94,7 @@ exports.handler = (event, context, callback) => {
   /*
    *  Check parameters to this Lambda.
    */
-  const insertPath = job.data.actionConfiguration.configuration.UserParameters;
+  var insertPath = job.data.actionConfiguration.configuration.UserParameters;
   if (!insertPath) {
     insertPath = ''
   }
@@ -151,6 +152,7 @@ exports.handler = (event, context, callback) => {
     }
     console.log(`  type=${data1.ContentType}, length=${data1.ContentLength}`)
     var content1 = data1.Body;
+    detectedServerSideEncryption = data1.ServerSideEncryption;
 
     /*
      *  Load the second artifact
@@ -195,11 +197,17 @@ exports.handler = (event, context, callback) => {
 
         // See https://stackoverflow.com/questions/40188287/aws-lambda-function-write-to-s3
         //var s3 = new AWS.S3();
+        console.log("output bucket: " + outputBucket + " key: " + outputKey);
         var params = {
           Bucket: outputBucket,
           Key: outputKey,
           Body: outputContent
         }
+        //encryption if enforced
+        if (detectedServerSideEncryption) {
+            params.ServerSideEncryption = detectedServerSideEncryption;
+        }
+        
         s3.putObject(params, function(err, data) {
           if (err) {
             const message = `Error while saving output artifact to S3 bucket.`
