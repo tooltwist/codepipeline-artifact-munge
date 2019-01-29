@@ -41,7 +41,13 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
         if (index >= list.length) {
           // All done. Convert the modified Zip file back into a buffer
           console.log('mergeIntoZip 4');
-          zip1.generateAsync({type: 'nodeBuffer'}).then(function(outputContent) {
+          zip1.generateAsync({
+            type: 'nodeBuffer',
+            compression: "DEFLATE",
+            compressionOptions: {
+              level: 1
+            }
+          }).then(function(outputContent) {
             console.log('mergeIntoZip 5');
             // Successfully converted to zip file format.
             // console.log(typeof(outputContent));
