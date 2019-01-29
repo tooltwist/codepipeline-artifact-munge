@@ -63,7 +63,7 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
           // console.log('  content:', content);
 
           // Add the file into the first zip
-          zip1.file(insertPath + '/' + name, content, {
+          zip1.file(insertPath + name, content, {
             date: file.date,
             unixPermissions: file.unixPermissions,
             dosPermissions: file.dosPermissions,

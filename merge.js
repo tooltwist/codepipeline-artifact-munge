@@ -93,10 +93,9 @@ exports.handler = (event, context, callback) => {
   /*
    *  Check parameters to this Lambda.
    */
-  const insertPath = job.data.actionConfiguration.configuration.UserParameters;
-  if (!insertPath) {
-    insertPath = ''
-  }
+  const userParams = job.data.actionConfiguration.configuration.UserParameters;
+  const insertPath = userParams ? userParams + '/' : '';
+
   console.log('UserParameters used as insertPath: ' + insertPath);
   const inputArtifacts = job.data.inputArtifacts;
   if (!inputArtifacts || inputArtifacts.length != 2) {
