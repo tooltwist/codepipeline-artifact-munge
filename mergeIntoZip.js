@@ -59,7 +59,7 @@ module.exports = function mergeIntoZip(zipfile1, zipfile2, insertPath, callback/
         var name = list[index]
         console.log(`    - ${name}`);
         var file = zip2.file(name);
-        file.async("string").then(content => {
+        file.async("uint8array").then(content => {
           // console.log('  content:', content);
 
           // Add the file into the first zip
